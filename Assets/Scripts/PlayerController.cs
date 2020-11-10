@@ -32,8 +32,6 @@ public class PlayerController : MonoBehaviour
     public float ServeFrequency = 2.0f;
     private float nextServeTime;
 
-    public bool holdingSpace;
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -43,16 +41,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            holdingSpace = true;
-
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            holdingSpace = false;
-
-        }
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * speed;
         canvas.transform.position = transform.position + new Vector3(-0.1f, 0, 0);
@@ -79,7 +67,9 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(0, 0, h * rotationSpeed);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextServeTime)
+        bool pressedSpace = Input.GetKeyDown(KeyCode.Space);
+        bool releasedSpace = Input.GetKeyUp(KeyCode.Space);
+        if ((pressedSpace || releasedSpace) && Time.time > nextServeTime)
         {
             if (ServeBall("Forehand"))
             {
