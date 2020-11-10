@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Sound : {
-
-
-    public AudioClip clip;
-
-    public float volume;
-    public float pitch;
-    
-    
-}
+fileFormatVersion: 2
+guid: a78f360e33871474a8ec81fc0f31697d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
