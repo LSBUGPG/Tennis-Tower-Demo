@@ -30,7 +30,8 @@ public class PlayerController : MonoBehaviour
     public Canvas canvas;
 
     public float ServeFrequency = 2.0f;
-    private float nextServeTime;
+    public GameObject curveball;
+    float nextServeTime = 0;
 
     void Start()
     {
@@ -41,6 +42,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Curveball cb = Instantiate(curveball, new Vector2(transform.position.x + spawnPosition.x, transform.position.y + spawnPosition.y), Quaternion.identity).GetComponent<Curveball>();
+            //cb.Fired();
+        }
+
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * speed;
         canvas.transform.position = transform.position + new Vector3(-0.1f, 0, 0);
@@ -109,7 +116,7 @@ public class PlayerController : MonoBehaviour
             if (serveType == "Forehand")
             {
                 sliderAnimate.Animateslider();
-               sliderParent.SetActive(true);
+                sliderParent.SetActive(true);
             }
 
 
@@ -163,5 +170,13 @@ public class PlayerController : MonoBehaviour
     {
         //rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
         rb.velocity = moveVelocity * Time.fixedDeltaTime;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
