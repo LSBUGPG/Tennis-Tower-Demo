@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
+    public float spin;
 
     private Rigidbody2D rb;
     private Vector2 moveVelocity;
@@ -42,11 +43,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Curveball cb = Instantiate(curveball, new Vector2(transform.position.x + spawnPosition.x, transform.position.y + spawnPosition.y), Quaternion.identity).GetComponent<Curveball>();
-            //cb.Fired();
-        }
+        // if (Input.GetKeyDown(KeyCode.Alpha1))
+        // {
+        //     Curveball cb = Instantiate(curveball, new Vector2(transform.position.x + spawnPosition.x, transform.position.y + spawnPosition.y), Quaternion.identity).GetComponent<Curveball>();
+        //     //cb.Fired();
+        // }
 
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * speed;
@@ -80,7 +81,14 @@ public class PlayerController : MonoBehaviour
         {
             if (ServeBall("Forehand"))
             {
-                aball.Serve(transform.up, "Forehand");
+                if (Input.GetKey(KeyCode.Alpha1))
+                {
+                    aball.Serve(transform.up, "Forehand", spin);
+                }
+                else
+                {
+                    aball.Serve(transform.up, "Forehand");
+                }
             }
 
         }

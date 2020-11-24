@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-
+    public float magnusEffect = 0.0005f;
     public float startingSize = 0.5f;
     public float maximumSize = 1f;
     public float minimumSize = 0.2f;
@@ -26,6 +26,7 @@ public class Ball : MonoBehaviour
     PlayerController player;
 
     private Vector3 direction;
+    private float spin;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +70,7 @@ public class Ball : MonoBehaviour
             float power = CalculateSpeed(sv);
             print(power);
             rb.AddForce(direction * Time.deltaTime * power, ForceMode2D.Impulse);
+            rb.AddTorque(spin * Time.deltaTime * power, ForceMode2D.Impulse);
             player.StopReferencingBall();
             //}
         }
@@ -78,9 +80,17 @@ public class Ball : MonoBehaviour
             rb.AddForce(direction * Time.deltaTime * smashSpeed, ForceMode2D.Impulse);
             player.StopReferencingBall();
         }
+    }
 
-
-
+    void FixedUpdate()
+    {
+        // Debug.DrawRay(transform.position, rb.velocity, Color.red);
+        if (Mathf.Abs(rb.angularVelocity) >= 0.01f)
+        {
+            float magnusEffect = 0.0005f;
+            rb.AddForce(Vector3.Cross(rb.velocity.normalized, Vector3.forward) * rb.angularVelocity * magnusEffect);
+            Debug.DrawRay(transform.position, Vector3.Cross(rb.velocity.normalized, Vector3.forward) * rb.angularVelocity * magnusEffect * 10.0f, Color.green);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -136,10 +146,11 @@ public class Ball : MonoBehaviour
         return served;
     }
 
-    public void Serve(Vector3 v, string s)
+    public void Serve(Vector3 v, string s, float spin = 0.0f)
     {
         serving = true;
         direction = v;
+        this.spin = spin;
         serveType = s;
     }
 }
